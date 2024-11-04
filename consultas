@@ -1,0 +1,41 @@
+/*
+1- Listar todos Clientes que não tenham realizado uma compra;
+2- Listar os Produtos que não tenham sido comprados
+3- Listar os Produtos sem Estoque;
+4- Agrupar a quantidade de vendas que uma determinada Marca por Loja.
+5- Listar os Funcionarios que não estejam relacionados a um Pedido.
+*/
+
+--1- Listar todos Clientes que não tenham realizado uma compra;
+select * from customers c
+left join orders o on c.customer_id = o.customer_id
+where o.customer_id is null;
+
+--2- Listar os Produtos que não tenham sido comprados
+select * from products p
+inner join order_items oi on p.product_id = oi.product_id
+where p.quantity <= 0;
+
+--3- Listar os Produtos sem Estoque
+select * from products p
+inner join stocks s on p.product_id = s.product_id
+where s.quantity <= 0;
+
+--4- Agrupar a quantidade de vendas de uma determinada Marca por Loja
+select b.brand_name, s.store_name, count(*) as quantidade  from brands b
+inner join products p on b.brand_id = b.brand_id
+inner join order_items oi on p.product_id = oi.product_id
+inner join order o on oi.order_id = o.order_id
+inner join stores s on o.store_id = s.store_id
+group by b.brand_name, s.store_name;
+
+--5- Listar os Funcionarios que não estejam relacionados a um Pedido.
+select * from staffs s
+left join order o on s.staff_id = o.staff_id
+where o.staff_id is null
+
+
+--outros
+--todos os clientes que possuem compras
+select * from customers c
+inner join orders o on c.customer_id = o.customer_id
